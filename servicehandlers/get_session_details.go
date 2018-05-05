@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"simplesurveygo/dao"
+	//"simplesurveygo/decorators"
 )
 
 type SessionHandler struct {
@@ -21,9 +22,12 @@ func (p SessionHandler) Get(r *http.Request) SrvcRes {
 	fmt.Println("HEADERS : ", r.Header)
 
 	token := tokens[0]
-
-	user := dao.GetSessionDetails(token)
+	if dao.validate_token(token) {
+    user := dao.GetSessionDetails(token)
 	return Response200OK(user)
+	} else {
+		return  ResponseNotImplemented()
+	}
 }
 
 func (p SessionHandler) Put(r *http.Request) SrvcRes {
